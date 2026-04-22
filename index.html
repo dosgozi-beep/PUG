@@ -3,22 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POPPING UP GUNMA | 企業連携のご提案</title>
-<meta name="description" content="群馬大学の起業サークル POPPING UP GUNMA（PUG）による、企業連携・共創プロジェクトのご提案。">
+<title>POPPING UP GUNMA | 群大生と共に創る、課題解決プロジェクト</title>
+<meta name="description" content="POPPING UP GUNMA（PUG）は、群馬大学の全学・起業サークルです。22名の学生が、貴社の課題解決を共に創ります。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F3EEE4;
-    --bg-alt: #E9E2D2;
+    --bg: #F8EFD8;
+    --bg-alt: #F0E4C5;
     --bg-dark: #1A1814;
     --ink: #1A1814;
     --ink-soft: #3A342B;
     --muted: #7A7063;
-    --accent: #D94A1F;
-    --accent-deep: #A8320C;
-    --accent-soft: #F4D4C4;
+    --accent: #FF5722;
+    --accent-deep: #D4410E;
+    --accent-soft: #FFC9B0;
+    --accent-yellow: #FFB800;
     --line: #2B2720;
     --line-soft: rgba(43, 39, 32, 0.15);
   }
@@ -37,18 +38,38 @@
     position: relative;
   }
 
+  /* 
+    BACKGROUND SYSTEM
+    ------------------
+    Midjourneyで生成した背景画像を body::before で表示する設計。
+    プロンプトは説明文を参照してください。
+    画像を./bg-texture.jpg として同階層に配置するだけで有効化します。
+    画像がない場合は、手描き風のノイズ+グロー効果にフォールバックします。
+  */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.18;
     z-index: 1;
-    background-image:
+    background-image: url('./bg-texture.jpg'),
       radial-gradient(circle at 20% 30%, rgba(0,0,0,0.04) 1px, transparent 1px),
       radial-gradient(circle at 70% 60%, rgba(0,0,0,0.03) 1px, transparent 1px);
-    background-size: 3px 3px, 5px 5px;
+    background-size: cover, 3px 3px, 5px 5px;
+    background-position: center;
+    background-repeat: no-repeat, repeat, repeat;
     mix-blend-mode: multiply;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: 
+      radial-gradient(ellipse at 85% 15%, rgba(255, 87, 34, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 85%, rgba(255, 184, 0, 0.05) 0%, transparent 45%);
   }
 
   /* ===== Nav ===== */
@@ -60,63 +81,139 @@
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background: rgba(243, 238, 228, 0.85);
+    background: rgba(248, 239, 216, 0.88);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line-soft);
   }
   nav .logo {
     font-family: "Shippori Mincho", serif;
     font-weight: 800;
-    font-size: 17px;
+    font-size: 18px;
     letter-spacing: -0.01em;
   }
   nav .logo span { color: var(--accent); }
-  nav ul { display: flex; gap: 26px; list-style: none; }
+  nav ul { display: flex; gap: 28px; list-style: none; }
   nav ul a {
     color: var(--ink-soft);
     text-decoration: none;
     font-size: 13px;
     letter-spacing: 0.03em;
     transition: color 0.2s;
+    position: relative;
+  }
+  nav ul a::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 100%;
+    height: 2px;
+    background: var(--accent);
+    transition: right 0.3s ease;
   }
   nav ul a:hover { color: var(--accent); }
+  nav ul a:hover::after { right: 0; }
   .nav-cta {
     background: var(--accent);
-    color: var(--bg);
+    color: white;
     padding: 10px 22px;
     border-radius: 999px;
     font-size: 13px;
+    font-weight: 500;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(255, 87, 34, 0.3);
   }
-  .nav-cta:hover { background: var(--accent-deep); }
+  .nav-cta:hover { 
+    background: var(--accent-deep); 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+  }
 
-  /* ===== Photo ===== */
-  .photo {
+  /* ===== Slideshow ===== */
+  .slideshow {
     position: relative;
     overflow: hidden;
     background: var(--bg-alt);
-    border-radius: 2px;
   }
-  .photo img {
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+  .slide.active {
+    opacity: 1;
+    z-index: 2;
+  }
+  .slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: saturate(0.88) contrast(0.97) brightness(0.98);
-    transition: filter 0.8s ease, transform 1s ease;
+    filter: saturate(1) contrast(1);
+    transition: transform 6s ease;
   }
-  .photo:hover img {
-    filter: saturate(1) contrast(1) brightness(1);
-    transform: scale(1.03);
+  .slide.active img {
+    transform: scale(1.06);
   }
-  .photo::after {
+  .slide::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(243, 238, 228, 0.02) 0%, rgba(26, 24, 20, 0.05) 100%);
+    background: linear-gradient(180deg, rgba(243, 238, 228, 0) 50%, rgba(26, 24, 20, 0.25) 100%);
     pointer-events: none;
-    mix-blend-mode: multiply;
+  }
+
+  .slideshow-nav {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    align-items: center;
+  }
+  .slideshow-nav .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+  }
+  .slideshow-nav .dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    width: 28px;
+    border-radius: 4px;
+  }
+  .slideshow-nav .dot:hover { background: rgba(255, 255, 255, 0.85); }
+  .slideshow-nav .dot.active:hover { background: var(--accent); }
+  .slideshow-counter {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(26, 24, 20, 0.7);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    z-index: 10;
+  }
+  .slideshow-counter em {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: 0;
+    font-size: 12px;
+    margin: 0 4px;
   }
 
   /* ===== Hero ===== */
@@ -133,7 +230,7 @@
   }
 
   .hero-left {
-    padding: 40px 60px 60px 0;
+    padding: 32px 56px 56px 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -144,29 +241,37 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
-  .hero-top .issue {
+  .hero-top .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    transform: rotate(-2deg);
+    box-shadow: 0 4px 12px rgba(255, 87, 34, 0.25);
+  }
+  .hero-top .est {
     font-family: "Instrument Serif", serif;
     font-style: italic;
-    font-size: 20px;
     color: var(--accent);
-    text-transform: none;
-    letter-spacing: 0;
+    font-size: 18px;
   }
 
   .hero-title {
     font-family: "Shippori Mincho", serif;
     font-weight: 800;
-    font-size: clamp(46px, 8.2vw, 138px);
-    line-height: 0.96;
+    font-size: clamp(42px, 7.2vw, 118px);
+    line-height: 1.0;
     letter-spacing: -0.025em;
     color: var(--ink);
-    margin-bottom: 36px;
+    margin-bottom: 28px;
     position: relative;
   }
   .hero-title .accent {
@@ -177,35 +282,28 @@
   .hero-title .accent::after {
     content: "";
     position: absolute;
-    top: -16px;
-    right: -28px;
+    top: -14px;
+    right: -26px;
     width: 20px;
     height: 20px;
     background: var(--accent);
     border-radius: 50%;
-    animation: pop 2.6s ease-in-out infinite;
+    animation: pop 2.4s ease-in-out infinite;
   }
   @keyframes pop {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.6; }
+    50% { transform: scale(1.35); opacity: 0.7; }
   }
 
   .hero-sub {
     font-family: "Instrument Serif", serif;
     font-style: italic;
-    font-size: clamp(20px, 2.4vw, 34px);
+    font-size: clamp(18px, 2.1vw, 30px);
     color: var(--ink-soft);
     line-height: 1.2;
     max-width: 640px;
-    margin-bottom: 40px;
-  }
-
-  .hero-lede {
-    font-size: 15px;
-    color: var(--ink-soft);
-    max-width: 480px;
-    line-height: 1.9;
-    padding-top: 28px;
+    margin-bottom: 0;
+    padding-top: 24px;
     border-top: 1px solid var(--line);
   }
 
@@ -213,37 +311,9 @@
     position: relative;
     overflow: hidden;
   }
-  .hero-right .photo {
-    position: absolute;
-    inset: 0;
-    border-radius: 0;
-  }
-  .hero-right .photo img {
-    filter: saturate(0.92) contrast(1.02);
-  }
-  .hero-right .photo-tag {
-    position: absolute;
-    bottom: 24px;
-    left: 24px;
-    background: rgba(26, 24, 20, 0.8);
-    backdrop-filter: blur(8px);
-    color: var(--bg);
-    padding: 10px 16px;
-    border-radius: 2px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    z-index: 3;
-  }
-  .hero-right .photo-tag em {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    color: var(--accent);
-    margin-right: 6px;
-    font-size: 14px;
-    letter-spacing: 0;
-  }
+  .hero-right .slideshow { height: 100%; position: absolute; inset: 0; }
 
+  /* Floating particles */
   .floaters {
     position: absolute;
     inset: 0;
@@ -255,16 +325,16 @@
     position: absolute;
     border-radius: 50%;
     background: var(--accent);
-    opacity: 0.22;
     animation: float 9s ease-in-out infinite;
   }
-  .floaters .dot:nth-child(1) { top: 30%; left: 6%; width: 10px; height: 10px; animation-delay: 0s; }
-  .floaters .dot:nth-child(2) { top: 65%; left: 18%; width: 6px; height: 6px; animation-delay: 2s; background: var(--ink); }
-  .floaters .dot:nth-child(3) { top: 20%; left: 32%; width: 8px; height: 8px; animation-delay: 3.5s; }
+  .floaters .dot:nth-child(1) { top: 28%; left: 5%; width: 10px; height: 10px; opacity: 0.3; animation-delay: 0s; }
+  .floaters .dot:nth-child(2) { top: 64%; left: 16%; width: 6px; height: 6px; opacity: 0.4; background: var(--accent-yellow); animation-delay: 2s; }
+  .floaters .dot:nth-child(3) { top: 20%; left: 32%; width: 8px; height: 8px; opacity: 0.35; animation-delay: 3.5s; }
+  .floaters .dot:nth-child(4) { top: 80%; left: 8%; width: 14px; height: 14px; opacity: 0.2; background: var(--accent-yellow); animation-delay: 1s; }
   @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    33% { transform: translateY(-30px) translateX(15px); }
-    66% { transform: translateY(15px) translateX(-10px); }
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    33% { transform: translateY(-35px) translateX(18px) rotate(120deg); }
+    66% { transform: translateY(18px) translateX(-12px) rotate(240deg); }
   }
 
   /* ===== Stats strip ===== */
@@ -273,7 +343,7 @@
     color: var(--bg);
     padding: 28px 40px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     border-bottom: 1px solid var(--line);
     position: relative;
@@ -285,7 +355,9 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    transition: transform 0.3s ease;
   }
+  .stats-strip .stat:hover { transform: translateY(-2px); }
   .stats-strip .stat:first-child { padding-left: 0; }
   .stats-strip .stat:last-child { border-right: none; padding-right: 0; }
   .stats-strip .stat .label {
@@ -314,7 +386,7 @@
   section {
     position: relative;
     z-index: 2;
-    padding: 140px 40px;
+    padding: 130px 40px;
     border-bottom: 1px solid var(--line);
   }
   .wrap { max-width: 1280px; margin: 0 auto; }
@@ -323,7 +395,7 @@
     display: flex;
     align-items: baseline;
     gap: 20px;
-    margin-bottom: 48px;
+    margin-bottom: 44px;
   }
   .chapter-mark .num {
     font-family: "Instrument Serif", serif;
@@ -350,6 +422,22 @@
     max-width: 900px;
   }
   .chapter-title .accent { color: var(--accent); }
+  .chapter-title .highlight {
+    position: relative;
+    display: inline-block;
+  }
+  .chapter-title .highlight::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    bottom: 0.1em;
+    height: 0.3em;
+    background: var(--accent-yellow);
+    z-index: -1;
+    opacity: 0.6;
+    transform: skew(-4deg);
+  }
 
   /* ===== 01 · About PUG ===== */
   .about-grid {
@@ -375,11 +463,25 @@
     color: var(--ink);
   }
   .about-motto {
-    margin-top: 40px;
+    margin-top: 36px;
     padding: 28px 32px;
     background: var(--bg-alt);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 2px 2px 0;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 3px 3px 0;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .about-motto:hover { transform: translateX(6px); }
+  .about-motto::before {
+    content: "";
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.15;
   }
   .about-motto .motto-label {
     font-family: "JetBrains Mono", monospace;
@@ -406,30 +508,11 @@
   .about-photo-col {
     position: relative;
   }
-  .about-photo-col .photo {
+  .about-photo-col .slideshow {
     aspect-ratio: 4 / 5;
     height: 100%;
     min-height: 420px;
-  }
-  .about-photo-col .photo-caption {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--bg);
-    padding: 10px 14px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    border-radius: 2px;
-    z-index: 2;
-    color: var(--ink-soft);
-  }
-  .about-photo-col .photo-caption em {
-    color: var(--accent);
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    font-size: 13px;
-    letter-spacing: 0;
+    border-radius: 3px;
   }
 
   /* Vision */
@@ -446,7 +529,7 @@
     font-style: italic;
     font-size: 22px;
     color: var(--accent);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     display: block;
   }
   .vision-stage .text {
@@ -466,10 +549,13 @@
   .vision-stage .text em::after {
     content: "";
     position: absolute;
-    left: 0; bottom: 2px;
-    width: 100%; height: 3px;
-    background: var(--accent);
-    opacity: 0.25;
+    left: 0; bottom: 0.08em;
+    width: 100%;
+    height: 0.2em;
+    background: var(--accent-yellow);
+    z-index: -1;
+    opacity: 0.5;
+    transform: skew(-5deg);
   }
 
   /* Missions */
@@ -482,14 +568,18 @@
     padding: 36px 36px 36px 0;
     border-right: 1px solid var(--line-soft);
     position: relative;
+    transition: transform 0.3s ease;
   }
+  .mission:hover { transform: translateY(-6px); }
   .mission:last-child { border-right: none; padding-right: 0; }
   .mission-icon {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     margin-bottom: 24px;
     color: var(--accent);
+    transition: transform 0.4s ease;
   }
+  .mission:hover .mission-icon { transform: rotate(8deg) scale(1.1); }
   .mission-icon svg { width: 100%; height: 100%; }
   .mission h3 {
     font-family: "Shippori Mincho", serif;
@@ -504,26 +594,15 @@
     color: var(--ink-soft);
   }
 
-  /* ===== Gallery Band (full-bleed) ===== */
+  /* ===== Gallery Band (full-bleed slideshow) ===== */
   .gallery-band {
     padding: 0;
     border-bottom: 1px solid var(--line);
-  }
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: 1.8fr 1fr;
-    gap: 0;
     background: var(--bg-dark);
   }
-  .gallery-grid .photo {
-    border-radius: 0;
-  }
-  .gallery-grid .gallery-lead {
-    aspect-ratio: 16 / 10;
-  }
-  .gallery-grid .gallery-side {
-    aspect-ratio: auto;
-    min-height: 100%;
+  .gallery-band .slideshow {
+    aspect-ratio: 21 / 9;
+    max-height: 720px;
   }
   .gallery-caption-strip {
     background: var(--bg-dark);
@@ -561,13 +640,17 @@
     padding: 40px 0;
     border-bottom: 1px solid var(--line);
     align-items: baseline;
-    transition: padding-left 0.35s ease;
+    transition: padding-left 0.35s ease, background 0.35s ease;
+    position: relative;
   }
-  .record-item:hover { padding-left: 16px; }
+  .record-item:hover { 
+    padding-left: 20px; 
+    background: linear-gradient(to right, rgba(255, 87, 34, 0.04), transparent 60%);
+  }
   .record-item .n {
     font-family: "Instrument Serif", serif;
     font-style: italic;
-    font-size: 44px;
+    font-size: 48px;
     color: var(--accent);
     line-height: 1;
   }
@@ -610,8 +693,10 @@
     font-family: "Instrument Serif", serif;
     font-style: italic;
     color: var(--accent);
-    font-size: 24px;
+    font-size: 28px;
+    transition: transform 0.3s ease;
   }
+  .record-item:hover .badge span { transform: rotate(20deg) scale(1.2); }
 
   /* ===== 03 · Co-creation ===== */
   .co-section {
@@ -644,27 +729,48 @@
   }
   .flow-step {
     background: var(--bg-dark);
-    padding: 48px 40px;
+    padding: 44px 36px;
     display: flex;
     flex-direction: column;
     transition: background 0.3s ease;
   }
   .flow-step:hover { background: #221E17; }
-  .flow-step .icon-stage {
+  .flow-step .flow-image {
     width: 100%;
-    aspect-ratio: 1.6 / 1;
+    aspect-ratio: 4 / 3;
     margin-bottom: 32px;
+    background: rgba(255, 87, 34, 0.08);
+    border-radius: 3px;
+    border: 1px solid rgba(255, 87, 34, 0.2);
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s ease;
+  }
+  .flow-step:hover .flow-image {
+    border-color: rgba(255, 87, 34, 0.45);
+  }
+  .flow-step .flow-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+  }
+  .flow-step:hover .flow-image img { transform: scale(1.08); }
+  /* Placeholder display when no image (before MJ images dropped in) */
+  .flow-step .flow-image[data-empty="true"]::before {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(217, 74, 31, 0.06);
-    border-radius: 2px;
-    border: 1px solid rgba(217, 74, 31, 0.15);
-  }
-  .flow-step .icon-stage svg {
-    width: 52%;
-    max-width: 180px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
     color: var(--accent);
+    text-align: center;
+    padding: 20px;
   }
   .flow-step .step-meta {
     display: flex;
@@ -738,16 +844,17 @@
     gap: 10px;
     padding: 14px 24px;
     background: transparent;
-    border: 1px solid var(--ink);
+    border: 1.5px solid var(--ink);
     color: var(--ink);
     text-decoration: none;
     border-radius: 999px;
     font-size: 13px;
+    font-weight: 500;
     letter-spacing: 0.02em;
     transition: all 0.25s ease;
     white-space: nowrap;
   }
-  .ig-follow-btn:hover { background: var(--ink); color: var(--bg); }
+  .ig-follow-btn:hover { background: var(--ink); color: var(--bg); transform: translateY(-2px); }
   .ig-follow-btn .arrow {
     font-family: "Instrument Serif", serif;
     font-style: italic;
@@ -767,14 +874,17 @@
     border-radius: 3px;
     overflow: hidden;
     position: relative;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 24px;
   }
-  .ig-post:hover { transform: translateY(-4px); }
+  .ig-post:hover { 
+    transform: translateY(-6px) rotate(-1deg); 
+    box-shadow: 0 12px 28px rgba(26, 24, 20, 0.12);
+  }
   .ig-placeholder {
     display: flex;
     flex-direction: column;
@@ -801,37 +911,10 @@
   }
 
   /* ===== 04 · Provide ===== */
-  .provide-layout {
-    display: grid;
-    grid-template-columns: 0.85fr 1.4fr;
-    gap: 80px;
-    align-items: start;
-  }
-  .provide-visual {
-    position: sticky;
-    top: 110px;
-  }
-  .provide-visual .photo {
-    aspect-ratio: 3 / 4;
-    margin-bottom: 24px;
-  }
-  .provide-visual .visual-text {
-    font-family: "Shippori Mincho", serif;
-    font-weight: 700;
-    font-size: 19px;
-    line-height: 1.7;
-    color: var(--ink);
-  }
-  .provide-visual .visual-text em {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 400;
-  }
-
   .provides {
     display: flex;
     flex-direction: column;
+    margin-bottom: 80px;
   }
   .provide {
     display: grid;
@@ -840,21 +923,26 @@
     padding: 36px 0;
     border-top: 1px solid var(--line);
     align-items: flex-start;
-    transition: padding-left 0.35s ease;
+    transition: padding-left 0.35s ease, background 0.35s ease;
   }
   .provide:last-child { border-bottom: 1px solid var(--line); }
-  .provide:hover { padding-left: 14px; }
+  .provide:hover { 
+    padding-left: 16px; 
+    background: linear-gradient(to right, rgba(255, 87, 34, 0.04), transparent 60%);
+  }
   .provide-icon {
     width: 56px;
     height: 56px;
     color: var(--accent);
     padding-top: 4px;
+    transition: transform 0.4s ease;
   }
+  .provide:hover .provide-icon { transform: rotate(10deg) scale(1.1); }
   .provide-icon svg { width: 100%; height: 100%; }
   .provide .n {
     font-family: "Instrument Serif", serif;
     font-style: italic;
-    font-size: 36px;
+    font-size: 40px;
     color: var(--accent);
     line-height: 1;
     padding-top: 4px;
@@ -873,79 +961,14 @@
     color: var(--ink-soft);
   }
 
-  /* ===== 05 · FAQ ===== */
-  .faq-section { background: var(--bg-alt); }
-  .faq-list {
-    border-top: 1px solid var(--line);
+  /* Provide closing photo (after list) */
+  .provide-closing-photo {
+    margin-top: 40px;
   }
-  .faq-item {
-    border-bottom: 1px solid var(--line);
-  }
-  .faq-toggle {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 60px 1fr 40px;
-    gap: 28px;
-    align-items: baseline;
-    padding: 32px 0;
-    background: transparent;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    font-family: inherit;
-    color: inherit;
-    transition: padding-left 0.35s ease;
-  }
-  .faq-toggle:hover { padding-left: 14px; }
-  .faq-toggle .q-mark {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    font-size: 32px;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .faq-toggle .q-text {
-    font-family: "Shippori Mincho", serif;
-    font-weight: 700;
-    font-size: clamp(18px, 1.8vw, 22px);
-    line-height: 1.4;
-    color: var(--ink);
-  }
-  .faq-toggle .q-arrow {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    font-size: 24px;
-    color: var(--accent);
-    transition: transform 0.3s ease;
-    text-align: right;
-  }
-  .faq-item.open .q-arrow { transform: rotate(45deg); }
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease;
-  }
-  .faq-item.open .faq-answer {
-    max-height: 400px;
-    padding-bottom: 32px;
-  }
-  .faq-answer-inner {
-    display: grid;
-    grid-template-columns: 60px 1fr 40px;
-    gap: 28px;
-  }
-  .faq-answer-inner .a-mark {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    font-size: 28px;
-    color: var(--ink-soft);
-    line-height: 1;
-    padding-top: 2px;
-  }
-  .faq-answer-inner p {
-    font-size: 15px;
-    line-height: 1.95;
-    color: var(--ink-soft);
+  .provide-closing-photo .slideshow {
+    aspect-ratio: 16 / 9;
+    border-radius: 3px;
+    max-height: 520px;
   }
 
   /* ===== Contact ===== */
@@ -953,6 +976,31 @@
     padding: 150px 40px;
     text-align: center;
     position: relative;
+    background: var(--bg);
+  }
+  .contact::before {
+    content: "";
+    position: absolute;
+    top: 60px;
+    left: 10%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: float 9s ease-in-out infinite;
+  }
+  .contact::after {
+    content: "";
+    position: absolute;
+    bottom: 80px;
+    right: 12%;
+    width: 40px;
+    height: 40px;
+    background: var(--accent-yellow);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: float 7s ease-in-out infinite reverse;
   }
   .contact .eyebrow {
     font-family: "Instrument Serif", serif;
@@ -988,6 +1036,7 @@
     font-size: 11px;
     letter-spacing: 0.15em;
     color: var(--ink-soft);
+    transform: rotate(-1deg);
   }
   .contact .next-step em {
     font-family: "Instrument Serif", serif;
@@ -1015,10 +1064,18 @@
     gap: 10px;
     font-weight: 500;
   }
-  .btn-primary { background: var(--accent); color: var(--bg); }
-  .btn-primary:hover { background: var(--accent-deep); transform: translateY(-2px); }
-  .btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
-  .btn-secondary:hover { background: var(--ink); color: var(--bg); }
+  .btn-primary { 
+    background: var(--accent); 
+    color: white; 
+    box-shadow: 0 6px 20px rgba(255, 87, 34, 0.3);
+  }
+  .btn-primary:hover { 
+    background: var(--accent-deep); 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 28px rgba(255, 87, 34, 0.4);
+  }
+  .btn-secondary { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+  .btn-secondary:hover { background: var(--ink); color: var(--bg); transform: translateY(-2px); }
   .btn .arrow {
     font-family: "Instrument Serif", serif;
     font-style: italic;
@@ -1053,7 +1110,7 @@
   .footer-logo {
     font-family: "Shippori Mincho", serif;
     font-weight: 800;
-    font-size: 24px;
+    font-size: 26px;
     margin-bottom: 8px;
   }
   .footer-logo span { color: var(--accent); }
@@ -1070,6 +1127,7 @@
     text-decoration: none;
     font-size: 13px;
     line-height: 2;
+    transition: color 0.2s ease;
   }
   .footer-links a:hover { color: var(--accent); }
   .footer-bottom {
@@ -1096,44 +1154,40 @@
     .hero { grid-template-columns: 1fr; min-height: auto; padding: 120px 20px 0; }
     .hero-left { padding: 0 0 48px; }
     .hero-right { aspect-ratio: 4 / 3; }
-    .gallery-grid { grid-template-columns: 1fr; }
-    .gallery-grid .gallery-side { aspect-ratio: 16 / 10; }
   }
 
   @media (max-width: 768px) {
     nav { padding: 14px 20px; }
     nav ul { display: none; }
     .hero-top { flex-direction: column; gap: 14px; margin-bottom: 28px; }
-    .stats-strip { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 20px; }
-    .stats-strip .stat { border-right: none; padding: 0; }
-    section { padding: 88px 20px; }
+    .stats-strip { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 18px; }
+    .stats-strip .stat { border-right: none; padding: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
+    section { padding: 80px 20px; }
     .chapter-mark { margin-bottom: 28px; }
     .chapter-title { margin-bottom: 40px; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; margin-bottom: 64px; }
-    .about-photo-col .photo { min-height: 360px; }
+    .about-photo-col .slideshow { min-height: 360px; }
     .vision-stage { padding: 48px 0; margin-bottom: 56px; }
     .mission-row { grid-template-columns: 1fr; }
     .mission { border-right: none; border-bottom: 1px solid var(--line-soft); padding: 28px 0; }
     .mission:last-child { border-bottom: none; }
+    .gallery-band .slideshow { aspect-ratio: 4 / 3; }
     .record-item { grid-template-columns: 60px 1fr; gap: 14px; padding: 28px 0; }
     .record-item .year { grid-column: 1 / 3; padding-top: 4px; }
     .record-item .n { grid-column: 1; }
     .record-item .title-block { grid-column: 2; }
     .record-item .badge { display: none; }
     .flow { grid-template-columns: 1fr; gap: 1px; }
-    .flow-step { padding: 36px 28px; }
-    .flow-step .icon-stage { aspect-ratio: 2.2 / 1; margin-bottom: 24px; }
+    .flow-step { padding: 32px 24px; }
+    .flow-step .flow-image { aspect-ratio: 16 / 10; margin-bottom: 24px; }
     .flow-tagline { flex-direction: column; align-items: flex-start; }
     .ig-header { flex-direction: column; align-items: flex-start; }
     .ig-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .provide-layout { grid-template-columns: 1fr; gap: 40px; }
-    .provide-visual { position: static; }
     .provide { grid-template-columns: 56px 1fr; gap: 16px; padding: 24px 0; }
     .provide .n { grid-column: 1; grid-row: 1; }
     .provide-icon { display: none; }
     .provide-content { grid-column: 2; grid-row: 1; }
-    .faq-toggle { grid-template-columns: 40px 1fr 24px; gap: 14px; padding: 24px 0; }
-    .faq-answer-inner { grid-template-columns: 40px 1fr 24px; gap: 14px; }
+    .provide-closing-photo .slideshow { aspect-ratio: 4 / 3; }
     .contact { padding: 96px 20px; }
     .footer-grid { flex-direction: column; gap: 24px; }
     .footer-links { flex-direction: column; gap: 4px; }
@@ -1151,7 +1205,6 @@
     <li><a href="#record">実績</a></li>
     <li><a href="#cocreate">共創の進め方</a></li>
     <li><a href="#provide">提供できること</a></li>
-    <li><a href="#faq">FAQ</a></li>
   </ul>
   <a href="#contact" class="nav-cta">相談する →</a>
 </nav>
@@ -1162,38 +1215,51 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
 
   <div class="hero-left">
     <div class="hero-top">
-      <div>
-        <div class="issue">Proposal for Partner Companies</div>
-        <div style="margin-top: 4px;">企業連携のご提案</div>
-      </div>
-      <div style="text-align: right; font-family: 'Instrument Serif', serif; font-style: italic; color: var(--accent); font-size: 16px; text-transform: none; letter-spacing: 0;">
-        EST. 2024
-      </div>
+      <div class="kicker">PARTNER PROPOSAL · 2026</div>
+      <div class="est">EST. 2024</div>
     </div>
 
     <div>
       <h1 class="hero-title">
-        群大生の<br>
-        創造力で、<br>
-        <span class="accent">はじまる。</span>
+        群大生と、<br>
+        共に創る。<br>
+        <span class="accent">課題解決<br>プロジェクト。</span>
       </h1>
-      <p class="hero-sub">Let's shape what's next —<br>together, with Gunma University students.</p>
+      <p class="hero-sub">Co-creating solutions —<br>side by side with Gunma students.</p>
     </div>
-
-    <p class="hero-lede">
-      POPPING UP GUNMA（PUG）は、群馬大学の全学・起業サークルです。学部を越えた22名の学生が、貴社の次の一歩を共に考え、動かします。
-    </p>
   </div>
 
   <div class="hero-right">
-    <div class="photo">
-      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg" alt="POPPING UP GUNMA メンバー" loading="eager">
+    <div class="slideshow" data-interval="4500" data-start="0">
+      <div class="slide">
+        <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg" alt="PUGメンバー 01" loading="eager">
+      </div>
+      <div class="slide">
+        <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg" alt="PUGメンバー 02" loading="eager">
+      </div>
+      <div class="slide">
+        <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg" alt="PUGメンバー 03" loading="lazy">
+      </div>
+      <div class="slide">
+        <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg" alt="PUGメンバー 04" loading="lazy">
+      </div>
+      <div class="slide">
+        <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg" alt="PUGメンバー 05" loading="lazy">
+      </div>
+      <div class="slideshow-counter"><em>—</em>POPPING UP GUNMA</div>
+      <div class="slideshow-nav">
+        <button class="dot active" aria-label="Slide 1"></button>
+        <button class="dot" aria-label="Slide 2"></button>
+        <button class="dot" aria-label="Slide 3"></button>
+        <button class="dot" aria-label="Slide 4"></button>
+        <button class="dot" aria-label="Slide 5"></button>
+      </div>
     </div>
-    <div class="photo-tag"><em>—</em>POPPING UP GUNMA · 2024</div>
   </div>
 </section>
 
@@ -1211,10 +1277,6 @@
     <span class="label">Meeting</span>
     <span class="value">毎週木曜<em>18:00</em></span>
   </div>
-  <div class="stat">
-    <span class="label">Campuses</span>
-    <span class="value">4<em>キャンパス</em></span>
-  </div>
 </div>
 
 <!-- ===== 01 · ABOUT PUG ===== -->
@@ -1224,13 +1286,13 @@
       <div class="num">01</div>
       <div class="label">— About PUG</div>
     </div>
-    <h2 class="chapter-title reveal">群馬大学の、<br>起業サークルです。</h2>
+    <h2 class="chapter-title reveal">PUGとは</h2>
 
     <div class="about-grid">
       <div class="about-text-col reveal">
         <p class="about-lede">
-          <strong>POPPING UP GUNMA（PUG）</strong>は、2024年8月に誕生した、群馬大学を拠点とする全学・起業サークルです。<br><br>
-          医学部・理工学部・情報学部・教育学部から<strong>22名</strong>の学生が集い、<strong>勉強会</strong>と<strong>課題解決プロジェクト</strong>のサイクルを回しながら、社会に小さく、しかし確かな一歩を重ねています。
+          <strong>POPPING UP GUNMA（PUG）</strong>は、2024年8月に誕生した、群馬大学を拠点とする起業サークルです。<br><br>
+          医学部・理工学部・情報学部・教育学部から<strong>22名</strong>の学生が集い、<strong>勉強会</strong>と<strong>課題解決プロジェクト</strong>のサイクルを回しながら、学びと実践を積み重ねています。
         </p>
         <div class="about-motto">
           <div class="motto-label">— PUG'S MOTTO</div>
@@ -1240,9 +1302,30 @@
       </div>
 
       <div class="about-photo-col reveal">
-        <div class="photo-caption"><em>—</em>ACTIVITIES · 勉強会</div>
-        <div class="photo">
-          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg" alt="PUGの活動">
+        <div class="slideshow" data-interval="5000" data-start="1">
+          <div class="slide">
+            <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg" alt="PUGの活動 01">
+          </div>
+          <div class="slide">
+            <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg" alt="PUGの活動 02">
+          </div>
+          <div class="slide">
+            <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg" alt="PUGの活動 03">
+          </div>
+          <div class="slide">
+            <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg" alt="PUGの活動 04">
+          </div>
+          <div class="slide">
+            <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg" alt="PUGの活動 05">
+          </div>
+          <div class="slideshow-counter"><em>—</em>ACTIVITIES</div>
+          <div class="slideshow-nav">
+            <button class="dot active" aria-label="Slide 1"></button>
+            <button class="dot" aria-label="Slide 2"></button>
+            <button class="dot" aria-label="Slide 3"></button>
+            <button class="dot" aria-label="Slide 4"></button>
+            <button class="dot" aria-label="Slide 5"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -1258,7 +1341,7 @@
     <div class="mission-row">
       <div class="mission reveal">
         <div class="mission-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
             <circle cx="24" cy="24" r="6" fill="currentColor"/>
             <circle cx="24" cy="24" r="14"/>
             <circle cx="10" cy="24" r="2.5" fill="currentColor"/>
@@ -1272,11 +1355,11 @@
       </div>
       <div class="mission reveal" style="padding-left: 36px;">
         <div class="mission-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
             <path d="M 8 12 L 24 16 L 40 12 L 40 36 L 24 40 L 8 36 Z"/>
             <line x1="24" y1="16" x2="24" y2="40"/>
-            <line x1="14" y1="20" x2="20" y2="21.5" stroke-width="1.8"/>
-            <line x1="28" y1="21.5" x2="34" y2="20" stroke-width="1.8"/>
+            <line x1="14" y1="20" x2="20" y2="21.5" stroke-width="2"/>
+            <line x1="28" y1="21.5" x2="34" y2="20" stroke-width="2"/>
           </svg>
         </div>
         <h3>ノウハウの習得</h3>
@@ -1284,7 +1367,7 @@
       </div>
       <div class="mission reveal" style="padding-left: 36px;">
         <div class="mission-icon">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="10" cy="24" r="2.5" fill="currentColor" stroke="none"/>
             <path d="M 10 24 L 36 24"/>
             <polyline points="30 18, 36 24, 30 30"/>
@@ -1299,18 +1382,35 @@
   </div>
 </section>
 
-<!-- ===== GALLERY BAND ===== -->
+<!-- ===== GALLERY BAND (full-bleed slideshow) ===== -->
 <div class="gallery-band reveal">
-  <div class="gallery-grid">
-    <div class="photo gallery-lead">
-      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg" alt="PUGの活動風景">
+  <div class="slideshow" data-interval="5500" data-start="2">
+    <div class="slide">
+      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg" alt="PUG活動 01">
     </div>
-    <div class="photo gallery-side">
-      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg" alt="PUGのプロジェクト">
+    <div class="slide">
+      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg" alt="PUG活動 02">
+    </div>
+    <div class="slide">
+      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg" alt="PUG活動 03">
+    </div>
+    <div class="slide">
+      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg" alt="PUG活動 04">
+    </div>
+    <div class="slide">
+      <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg" alt="PUG活動 05">
+    </div>
+    <div class="slideshow-counter"><em>—</em>DOCUMENTED</div>
+    <div class="slideshow-nav">
+      <button class="dot active" aria-label="Slide 1"></button>
+      <button class="dot" aria-label="Slide 2"></button>
+      <button class="dot" aria-label="Slide 3"></button>
+      <button class="dot" aria-label="Slide 4"></button>
+      <button class="dot" aria-label="Slide 5"></button>
     </div>
   </div>
   <div class="gallery-caption-strip">
-    <div>POPPING UP GUNMA · DOCUMENTED ACTIVITIES · GUNMA UNIVERSITY</div>
+    <div>POPPING UP GUNMA · ACTIVITIES · GUNMA UNIVERSITY</div>
     <div class="highlight">— in motion, from Gunma.</div>
   </div>
 </div>
@@ -1386,18 +1486,14 @@
     </p>
 
     <div class="flow">
+      <!--
+        STEP 01 LISTEN
+        TODO: Midjourneyで生成した画像を ./flow-01-listen.jpg として配置
+        （プロンプトは別途ご案内）
+      -->
       <div class="flow-step reveal">
-        <div class="icon-stage">
-          <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-linecap="round">
-            <circle cx="100" cy="100" r="82" stroke-width="1" stroke-dasharray="2 4" opacity="0.35"/>
-            <circle cx="100" cy="100" r="56" stroke-width="1.2" opacity="0.6"/>
-            <circle cx="100" cy="100" r="32" stroke-width="1.5"/>
-            <circle cx="100" cy="100" r="8" fill="currentColor"/>
-            <path d="M 40 100 Q 45 92 40 84" stroke-width="1" opacity="0.6"/>
-            <path d="M 30 100 Q 38 88 30 76" stroke-width="1" opacity="0.4"/>
-            <path d="M 160 100 Q 155 108 160 116" stroke-width="1" opacity="0.6"/>
-            <path d="M 170 100 Q 162 112 170 124" stroke-width="1" opacity="0.4"/>
-          </svg>
+        <div class="flow-image" data-empty="true" data-label="STEP 01 — LISTEN / 画像を配置">
+          <img src="./flow-01-listen.jpg" alt="聞くフェーズ" onerror="this.parentElement.setAttribute('data-empty','true'); this.style.display='none';">
         </div>
         <div class="step-meta">
           <span class="verb">— Listen</span>
@@ -1407,36 +1503,29 @@
         <p>貴社の課題や背景を、時間をかけて伺います。「本当に解くべき問い」を、対話の中で一緒に輪郭づけていきます。</p>
       </div>
 
+      <!--
+        STEP 02 THINK
+        TODO: Midjourneyで生成した画像を ./flow-02-think.jpg として配置
+      -->
       <div class="flow-step reveal">
-        <div class="icon-stage">
-          <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="40" cy="70" r="5" fill="currentColor"/>
-            <path d="M 40 70 Q 80 40 100 100 T 160 130" stroke-width="1.8"/>
-            <circle cx="80" cy="65" r="3" fill="currentColor" opacity="0.55"/>
-            <circle cx="120" cy="108" r="3" fill="currentColor" opacity="0.55"/>
-            <polyline points="150 122, 160 130, 152 140" stroke-width="1.8"/>
-            <line x1="60" y1="35" x2="60" y2="28" stroke-width="1.2" opacity="0.5"/>
-            <line x1="75" y1="30" x2="79" y2="24" stroke-width="1.2" opacity="0.5"/>
-            <line x1="90" y1="28" x2="92" y2="21" stroke-width="1.2" opacity="0.5"/>
-          </svg>
+        <div class="flow-image" data-empty="true" data-label="STEP 02 — THINK / 画像を配置">
+          <img src="./flow-02-think.jpg" alt="思考するフェーズ" onerror="this.parentElement.setAttribute('data-empty','true'); this.style.display='none';">
         </div>
         <div class="step-meta">
-          <span class="verb">— Move</span>
+          <span class="verb">— Think</span>
           <span class="step-num">STEP 02</span>
         </div>
-        <h3>動く。</h3>
-        <p>学生チームがリサーチと発想を重ねます。学内外でのインタビュー、現場観察、ブレストを通じ、複数の提案へと結晶化します。</p>
+        <h3>思考する。</h3>
+        <p>学生チームがリサーチと発想を重ねます。学内外でのインタビュー、現場観察、ブレストを通じ、提案内容を考えます。</p>
       </div>
 
+      <!--
+        STEP 03 SHAPE
+        TODO: Midjourneyで生成した画像を ./flow-03-shape.jpg として配置
+      -->
       <div class="flow-step reveal">
-        <div class="icon-stage">
-          <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="38" y="38" width="90" height="90" stroke-width="1" stroke-dasharray="3 5" opacity="0.4"/>
-            <rect x="72" y="72" width="90" height="90" stroke-width="1.8"/>
-            <circle cx="117" cy="117" r="6" fill="currentColor"/>
-            <line x1="128" y1="72" x2="128" y2="128" stroke-width="0.8" opacity="0.35" stroke-dasharray="2 3"/>
-            <line x1="72" y1="128" x2="128" y2="128" stroke-width="0.8" opacity="0.35" stroke-dasharray="2 3"/>
-          </svg>
+        <div class="flow-image" data-empty="true" data-label="STEP 03 — SHAPE / 画像を配置">
+          <img src="./flow-03-shape.jpg" alt="形にするフェーズ" onerror="this.parentElement.setAttribute('data-empty','true'); this.style.display='none';">
         </div>
         <div class="step-meta">
           <span class="verb">— Shape</span>
@@ -1546,186 +1635,99 @@
     </div>
     <h2 class="chapter-title reveal">貴社に、<br>提供できること。</h2>
 
-    <div class="provide-layout">
-      <div class="provide-visual reveal">
-        <div class="photo">
-          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg" alt="PUGの協働">
+    <div class="provides">
+      <div class="provide reveal">
+        <div class="n">01</div>
+        <div class="provide-icon">
+          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+            <circle cx="24" cy="24" r="14"/>
+            <circle cx="24" cy="24" r="6" fill="currentColor"/>
+            <line x1="34" y1="34" x2="46" y2="46" stroke-width="2.2"/>
+          </svg>
         </div>
-        <p class="visual-text">
-          学生と組んだ<em>からこそ</em>生まれる価値を、<br>
-          表面的な協業ではなく、<br>
-          <em>実質的な手応え</em>として。
-        </p>
+        <div class="provide-content">
+          <h3>若年層の、生きたインサイト。</h3>
+          <p>調査レポートでは拾いきれない、学生の一次情報。「なぜ選ばないのか」「どう見えているのか」を、当事者の声でお届けします。</p>
+        </div>
       </div>
 
-      <div class="provides">
-        <div class="provide reveal">
-          <div class="n">01</div>
-          <div class="provide-icon">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-              <circle cx="24" cy="24" r="14"/>
-              <circle cx="24" cy="24" r="6" fill="currentColor"/>
-              <line x1="34" y1="34" x2="46" y2="46" stroke-width="2"/>
-            </svg>
-          </div>
-          <div class="provide-content">
-            <h3>若年層の、生きたインサイト。</h3>
-            <p>調査レポートでは拾いきれない、学生の一次情報。「なぜ選ばないのか」「どう見えているのか」を、当事者の声でお届けします。</p>
-          </div>
+      <div class="provide reveal">
+        <div class="n">02</div>
+        <div class="provide-icon">
+          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 28 12 L 28 18 M 42 20 L 38 22 M 14 20 L 18 22 M 44 36 L 40 36 M 12 36 L 16 36"/>
+            <circle cx="28" cy="30" r="10"/>
+            <path d="M 24 38 L 24 42 L 32 42 L 32 38" stroke-width="1.5"/>
+            <line x1="25" y1="45" x2="31" y2="45" stroke-width="1.5"/>
+          </svg>
         </div>
-
-        <div class="provide reveal">
-          <div class="n">02</div>
-          <div class="provide-icon">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M 28 12 L 28 18 M 42 20 L 38 22 M 14 20 L 18 22 M 44 36 L 40 36 M 12 36 L 16 36"/>
-              <circle cx="28" cy="30" r="10"/>
-              <path d="M 24 38 L 24 42 L 32 42 L 32 38" stroke-width="1.5"/>
-              <line x1="25" y1="45" x2="31" y2="45" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <div class="provide-content">
-            <h3>常識にとらわれない、発想と行動力。</h3>
-            <p>業界の文脈や前例から自由な、学生ならではの視点。加えて、思いついたら動き出す実行力が、小さな検証まで走り切ります。</p>
-          </div>
+        <div class="provide-content">
+          <h3>常識にとらわれない、発想と行動力。</h3>
+          <p>業界の文脈や前例から自由な、学生ならではの視点。加えて、思いついたら動き出す実行力が、小さな検証まで走り切ります。</p>
         </div>
+      </div>
 
-        <div class="provide reveal">
-          <div class="n">03</div>
-          <div class="provide-icon">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-              <circle cx="16" cy="20" r="6"/>
-              <circle cx="40" cy="20" r="6"/>
-              <path d="M 6 42 Q 6 32 16 32 Q 26 32 26 42"/>
-              <path d="M 30 42 Q 30 32 40 32 Q 50 32 50 42"/>
-              <line x1="22" y1="20" x2="34" y2="20" stroke-dasharray="2 3"/>
-            </svg>
-          </div>
-          <div class="provide-content">
-            <h3>意欲ある学生との、続いていく接点。</h3>
-            <p>プロジェクトをきっかけに、採用広報・人材との出会い・継続的な協働へ。一回きりで終わらない、関係のはじまりです。</p>
-          </div>
+      <div class="provide reveal">
+        <div class="n">03</div>
+        <div class="provide-icon">
+          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+            <circle cx="16" cy="20" r="6"/>
+            <circle cx="40" cy="20" r="6"/>
+            <path d="M 6 42 Q 6 32 16 32 Q 26 32 26 42"/>
+            <path d="M 30 42 Q 30 32 40 32 Q 50 32 50 42"/>
+            <line x1="22" y1="20" x2="34" y2="20" stroke-dasharray="2 3"/>
+          </svg>
         </div>
+        <div class="provide-content">
+          <h3>意欲ある学生との、続いていく接点。</h3>
+          <p>プロジェクトをきっかけに、採用広報・人材との出会い・継続的な協働へ。一回きりで終わらない、関係のはじまりです。</p>
+        </div>
+      </div>
 
-        <div class="provide reveal">
-          <div class="n">04</div>
-          <div class="provide-icon">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-              <circle cx="28" cy="32" r="4" fill="currentColor"/>
-              <path d="M 20 24 Q 17 28 17 32 Q 17 36 20 40"/>
-              <path d="M 36 24 Q 39 28 39 32 Q 39 36 36 40"/>
-              <path d="M 14 18 Q 9 24 9 32 Q 9 40 14 46" opacity="0.6"/>
-              <path d="M 42 18 Q 47 24 47 32 Q 47 40 42 46" opacity="0.6"/>
-              <line x1="28" y1="12" x2="28" y2="8"/>
-            </svg>
-          </div>
-          <div class="provide-content">
-            <h3>地域と学生への、ブランディング。</h3>
-            <p>群馬の学生コミュニティと連携する企業として、採用市場・地域双方への認知と好意度を、自然なかたちで積み上げます。</p>
-          </div>
+      <div class="provide reveal">
+        <div class="n">04</div>
+        <div class="provide-icon">
+          <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+            <circle cx="28" cy="32" r="4" fill="currentColor"/>
+            <path d="M 20 24 Q 17 28 17 32 Q 17 36 20 40"/>
+            <path d="M 36 24 Q 39 28 39 32 Q 39 36 36 40"/>
+            <path d="M 14 18 Q 9 24 9 32 Q 9 40 14 46" opacity="0.6"/>
+            <path d="M 42 18 Q 47 24 47 32 Q 47 40 42 46" opacity="0.6"/>
+            <line x1="28" y1="12" x2="28" y2="8"/>
+          </svg>
+        </div>
+        <div class="provide-content">
+          <h3>地域と学生への、ブランディング。</h3>
+          <p>群馬の学生コミュニティと連携する企業として、採用市場・地域双方への認知と好意度を、自然なかたちで積み上げます。</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ===== 05 · FAQ ===== -->
-<section id="faq" class="faq-section">
-  <div class="wrap">
-    <div class="chapter-mark reveal">
-      <div class="num">05</div>
-      <div class="label">— FAQ</div>
-    </div>
-    <h2 class="chapter-title reveal">よくある、<br>ご質問。</h2>
-
-    <div class="faq-list">
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">費用はどのくらいかかりますか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>プロジェクト内容により異なりますが、基本的には実費（交通費・取材費・制作費等）および活動支援金のみでご相談可能です。まずは貴社の課題感をお聞かせいただき、最適な進め方をご提案させてください。</p>
-            <span></span>
-          </div>
+    <!-- Closing slideshow after the 04 list -->
+    <div class="provide-closing-photo reveal">
+      <div class="slideshow" data-interval="5500" data-start="3">
+        <div class="slide">
+          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg" alt="PUGの協働 01">
         </div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">プロジェクトにはどのくらいの期間がかかりますか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>標準的には2〜3ヶ月程度です。テーマの規模や急ぎ度合い、貴社のご希望に応じて柔軟に調整させていただきます。短期のスポット協業から、長期の伴走型まで対応可能です。</p>
-            <span></span>
-          </div>
+        <div class="slide">
+          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg" alt="PUGの協働 02">
         </div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">学生だけで本当に大丈夫ですか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>PUGは医学部・理工学部・情報学部・教育学部の22名が在籍し、毎週の勉強会で外部講師から実践的な学びを積み重ねています。群馬イノベーションアワード(GIA) 2024 ファイナリスト、学生ビジネスコンテスト アイデア賞受賞の実績もあり、プロジェクトごとにテーマに最適なチームを編成します。</p>
-            <span></span>
-          </div>
+        <div class="slide">
+          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg" alt="PUGの協働 03">
         </div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">秘密保持契約（NDA）や契約書は対応できますか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>もちろん可能です。貴社でご用意いただいた契約書・NDAに基づいて進めます。初回お打ち合わせの際に、プロジェクト内容とあわせてご相談ください。</p>
-            <span></span>
-          </div>
+        <div class="slide">
+          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg" alt="PUGの協働 04">
         </div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">どんな業界・テーマで連携できますか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>基本的にどんな業界でも歓迎しています。過去にはコミュニティスペース「GALYEA」との共同プロジェクト実績があります。新規事業のアイデア創出、若年層マーケティング、採用ブランディング、地域連携、サービス改善など、幅広くご相談いただけます。</p>
-            <span></span>
-          </div>
+        <div class="slide">
+          <img src="https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg" alt="PUGの協働 05">
         </div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-toggle" aria-expanded="false">
-          <span class="q-mark">Q.</span>
-          <span class="q-text">まずは話を聞くだけ、でも大丈夫ですか？</span>
-          <span class="q-arrow">+</span>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            <span class="a-mark">A.</span>
-            <p>もちろん大歓迎です。いきなり契約や提案書は不要です。「まずは学生の話を聞いてみたい」「情報交換から始めたい」——そういったご相談が、私たちにとっても一番ありがたい入口です。オンラインでも、群馬・高崎近郊であれば対面でも対応いたします。</p>
-            <span></span>
-          </div>
+        <div class="slideshow-counter"><em>—</em>WITH YOU</div>
+        <div class="slideshow-nav">
+          <button class="dot active" aria-label="Slide 1"></button>
+          <button class="dot" aria-label="Slide 2"></button>
+          <button class="dot" aria-label="Slide 3"></button>
+          <button class="dot" aria-label="Slide 4"></button>
+          <button class="dot" aria-label="Slide 5"></button>
         </div>
       </div>
     </div>
@@ -1735,14 +1737,14 @@
 <!-- ===== CONTACT ===== -->
 <section id="contact" class="contact">
   <div class="eyebrow reveal">— Nice to meet you.</div>
-  <h2 class="reveal">まずは、<br><span class="accent">はじめまして、</span>から。</h2>
+  <h2 class="reveal">まずは、<br><span class="accent">対話から。</span></h2>
   <div class="next-step reveal">
     <span>NEXT STEP</span>
     <em>—</em>
     <span>30〜60分の、自己紹介ミーティング</span>
   </div>
   <p class="reveal">
-    いきなり契約や提案書は不要です。貴社のこと、私たちのこと——お互いを知る対話の時間から、はじめさせてください。オンラインでも、群馬・高崎近郊であれば対面でも対応いたします。
+    貴社のこと、私たちのこと——お互いを知る対話の時間から、はじめさせてください。オンラインでも、群馬・高崎近郊であれば対面でも対応いたします。
   </p>
 
   <div class="cta-group reveal">
@@ -1764,14 +1766,13 @@
   <div class="footer-grid">
     <div>
       <div class="footer-logo">POPPING UP<span>.</span> GUNMA</div>
-      <div class="footer-tag">— the creative force of Gunma students.</div>
+      <div class="footer-tag">— 群大生と、共に創る。</div>
     </div>
     <div class="footer-links">
       <a href="#about">PUGについて</a>
       <a href="#record">実績</a>
       <a href="#cocreate">共創の進め方</a>
       <a href="#provide">提供できること</a>
-      <a href="#faq">FAQ</a>
       <a href="https://www.instagram.com/poppingup960/" target="_blank">Instagram ↗</a>
     </div>
   </div>
@@ -1782,7 +1783,7 @@
 </footer>
 
 <script>
-  // Scroll reveal
+  /* ===== Scroll reveal ===== */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1793,15 +1794,42 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // FAQ accordion
-  document.querySelectorAll('.faq-toggle').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      const item = toggle.closest('.faq-item');
-      const isOpen = item.classList.contains('open');
-      // Close all other items for a cleaner UI
-      document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
-      toggle.setAttribute('aria-expanded', String(!isOpen));
+  /* ===== Slideshows ===== */
+  document.querySelectorAll('.slideshow').forEach((slideshow) => {
+    const slides = slideshow.querySelectorAll('.slide');
+    const dots = slideshow.querySelectorAll('.slideshow-nav .dot');
+    const interval = parseInt(slideshow.dataset.interval || '4500', 10);
+    const startIndex = parseInt(slideshow.dataset.start || '0', 10) % slides.length;
+    let current = startIndex;
+    let timer;
+
+    function show(index) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      current = index;
+    }
+    function next() { show((current + 1) % slides.length); }
+    function startAuto() { stopAuto(); timer = setInterval(next, interval); }
+    function stopAuto() { if (timer) clearInterval(timer); }
+
+    show(current);
+    startAuto();
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); startAuto(); }));
+    slideshow.addEventListener('mouseenter', stopAuto);
+    slideshow.addEventListener('mouseleave', startAuto);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopAuto(); else startAuto();
+    });
+  });
+
+  /* Handle missing Midjourney images in flow section */
+  document.querySelectorAll('.flow-image img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.parentElement.setAttribute('data-empty', 'true');
+      img.style.display = 'none';
+    });
+    img.addEventListener('load', () => {
+      img.parentElement.removeAttribute('data-empty');
     });
   });
 </script>
