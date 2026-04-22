@@ -326,6 +326,128 @@
   }
   .hero-right .slideshow { height: 100%; position: absolute; inset: 0; }
 
+  /* Static photo (hero) */
+  .hero-right .static-photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--bg-alt);
+  }
+  .hero-right .static-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.95) contrast(1);
+    transition: transform 1.2s ease;
+  }
+  .hero-right .static-photo:hover img {
+    transform: scale(1.03);
+  }
+  .hero-right .static-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(243, 238, 228, 0) 60%, rgba(26, 24, 20, 0.2) 100%);
+    pointer-events: none;
+  }
+  .hero-right .static-photo-tag {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(26, 24, 20, 0.75);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 2px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    z-index: 3;
+  }
+  .hero-right .static-photo-tag em {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: 0;
+    font-size: 13px;
+    margin-right: 4px;
+  }
+
+  /* About static photo */
+  .about-static-photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    height: 100%;
+    min-height: 420px;
+    overflow: hidden;
+    background: var(--bg-alt);
+    border-radius: 3px;
+  }
+  .about-static-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.95) contrast(1);
+    transition: transform 1s ease;
+  }
+  .about-static-photo:hover img {
+    transform: scale(1.04);
+  }
+  .about-static-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(26, 24, 20, 0.15) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .about-photo-caption {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--bg);
+    padding: 8px 14px;
+    border-radius: 2px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    z-index: 3;
+    color: var(--ink-soft);
+  }
+  .about-photo-caption em {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: 0;
+    font-size: 13px;
+    margin-right: 4px;
+  }
+
+  /* Gallery static grid */
+  .gallery-grid-static {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+  }
+  .gallery-grid-static .gallery-photo {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bg-alt);
+    position: relative;
+  }
+  .gallery-grid-static .gallery-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1s ease;
+  }
+  .gallery-grid-static .gallery-photo:hover img {
+    transform: scale(1.05);
+  }
+
   /* Floating particles */
   .floaters {
     position: absolute;
@@ -847,143 +969,6 @@
     text-transform: none;
   }
 
-  /* ===== Instagram Feed ===== */
-  .ig-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 48px;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-  .ig-header-left { max-width: 680px; }
-  .ig-follow-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 24px;
-    background: transparent;
-    border: 1.5px solid var(--ink);
-    color: var(--ink);
-    text-decoration: none;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    transition: all 0.25s ease;
-    white-space: nowrap;
-  }
-  .ig-follow-btn:hover { background: var(--ink); color: var(--bg); transform: translateY(-2px); }
-  .ig-follow-btn .arrow {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    transition: transform 0.25s ease;
-  }
-  .ig-follow-btn:hover .arrow { transform: translateX(4px); }
-
-  .ig-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-  .ig-post {
-    aspect-ratio: 1 / 1;
-    background: var(--bg-alt);
-    border: 1px solid var(--line-soft);
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-    display: block;
-    text-decoration: none;
-  }
-  .ig-post:hover { 
-    transform: translateY(-6px) rotate(-1deg); 
-    box-shadow: 0 12px 28px rgba(26, 24, 20, 0.18);
-  }
-  .ig-post img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: saturate(0.95) contrast(1);
-    transition: filter 0.5s ease, transform 0.8s ease;
-  }
-  .ig-post:hover img {
-    filter: saturate(1.1) contrast(1.02);
-    transform: scale(1.08);
-  }
-  .ig-post-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(26, 24, 20, 0) 40%, rgba(26, 24, 20, 0.55) 100%);
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    padding: 16px;
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-  }
-  .ig-post:hover .ig-post-overlay { opacity: 1; }
-  .ig-logo {
-    width: 28px;
-    height: 28px;
-    color: white;
-  }
-
-  .ig-footer {
-    border-top: 1px solid var(--line-soft);
-    padding-top: 32px;
-  }
-  .ig-footer-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 20px;
-    padding: 20px 28px;
-    background: var(--bg-alt);
-    border-radius: 999px;
-    text-decoration: none;
-    color: var(--ink);
-    transition: all 0.3s ease;
-  }
-  .ig-footer-link:hover {
-    background: var(--ink);
-    color: var(--bg);
-    transform: translateY(-2px);
-  }
-  .ig-footer-icon {
-    width: 36px;
-    height: 36px;
-    color: var(--accent);
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
-  }
-  .ig-footer-link:hover .ig-footer-icon { transform: rotate(10deg) scale(1.1); }
-  .ig-footer-handle {
-    font-family: "Shippori Mincho", serif;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 1.2;
-  }
-  .ig-footer-note {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .ig-footer-link:hover .ig-footer-note { color: rgba(243, 238, 228, 0.6); }
-  .ig-footer-arrow {
-    font-family: "Instrument Serif", serif;
-    font-style: italic;
-    font-size: 24px;
-    color: var(--accent);
-    transition: transform 0.3s ease;
-  }
-  .ig-footer-link:hover .ig-footer-arrow { transform: translateX(6px); }
-
   /* ===== 04 · Provide ===== */
   .provides {
     display: flex;
@@ -1033,16 +1018,6 @@
     font-size: 14.5px;
     line-height: 1.95;
     color: var(--ink-soft);
-  }
-
-  /* Provide closing photo (after list) */
-  .provide-closing-photo {
-    margin-top: 40px;
-  }
-  .provide-closing-photo .slideshow {
-    aspect-ratio: 16 / 9;
-    border-radius: 3px;
-    max-height: 520px;
   }
 
   /* ===== Contact ===== */
@@ -1234,22 +1209,26 @@
     nav { padding: 14px 20px; }
     nav ul { display: none; }
     .hero-top { flex-direction: column; gap: 14px; margin-bottom: 28px; }
-    /* Hero title becomes 2 lines on mobile */
-    .hero-title { font-size: clamp(36px, 10vw, 58px); }
-    .hero-title .title-break { display: none; }
-    .hero-title .accent-last { margin-left: 0.15em; }
+    /* Hero title: 3 lines on mobile */
+    .hero-title { font-size: clamp(38px, 11vw, 64px); }
+    .hero-title .line1 {
+      font-size: 0.52em;
+      white-space: nowrap;
+      margin-bottom: 14px;
+    }
     .stats-strip { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 18px; }
     .stats-strip .stat { border-right: none; padding: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
     section { padding: 80px 20px; }
     .chapter-mark { margin-bottom: 28px; }
     .chapter-title { margin-bottom: 40px; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; margin-bottom: 64px; }
-    .about-photo-col .slideshow { min-height: 360px; }
+    .about-static-photo { min-height: 360px; }
     .vision-stage { padding: 48px 0; margin-bottom: 56px; }
     .mission-row { grid-template-columns: 1fr; }
     .mission { border-right: none; border-bottom: 1px solid var(--line-soft); padding: 28px 0; }
     .mission:last-child { border-bottom: none; }
-    .gallery-band .slideshow { aspect-ratio: 4 / 3; }
+    .gallery-grid-static { grid-template-columns: 1fr; }
+    .gallery-grid-static .gallery-photo { aspect-ratio: 4 / 3; }
     .record-item { grid-template-columns: 60px 1fr; gap: 14px; padding: 28px 0; }
     .record-item .year { grid-column: 1 / 3; padding-top: 4px; }
     .record-item .n { grid-column: 1; }
@@ -1259,13 +1238,10 @@
     .flow-step { padding: 32px 24px; }
     .flow-step .flow-image { aspect-ratio: 16 / 10; margin-bottom: 24px; }
     .flow-tagline { flex-direction: column; align-items: flex-start; }
-    .ig-header { flex-direction: column; align-items: flex-start; }
-    .ig-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .provide { grid-template-columns: 56px 1fr; gap: 16px; padding: 24px 0; }
     .provide .n { grid-column: 1; grid-row: 1; }
     .provide-icon { display: none; }
     .provide-content { grid-column: 2; grid-row: 1; }
-    .provide-closing-photo .slideshow { aspect-ratio: 4 / 3; }
     .contact { padding: 96px 20px; }
     .footer-grid { flex-direction: column; gap: 24px; }
     .footer-links { flex-direction: column; gap: 4px; }
@@ -1313,30 +1289,9 @@
   </div>
 
   <div class="hero-right">
-    <div class="slideshow" data-interval="4500" data-start="0">
-      <div class="slide">
-        <img src="./pug-photo-01.jpeg" alt="PUGメンバー 01" loading="eager" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
-      </div>
-      <div class="slide">
-        <img src="./pug-photo-02.jpeg" alt="PUGメンバー 02" loading="eager" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
-      </div>
-      <div class="slide">
-        <img src="./pug-photo-03.jpeg" alt="PUGメンバー 03" loading="lazy" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg';">
-      </div>
-      <div class="slide">
-        <img src="./pug-photo-04.jpeg" alt="PUGメンバー 04" loading="lazy" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg';">
-      </div>
-      <div class="slide">
-        <img src="./pug-photo-05.jpeg" alt="PUGメンバー 05" loading="lazy" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg';">
-      </div>
-      <div class="slideshow-counter"><em>—</em>POPPING UP GUNMA</div>
-      <div class="slideshow-nav">
-        <button class="dot active" aria-label="Slide 1"></button>
-        <button class="dot" aria-label="Slide 2"></button>
-        <button class="dot" aria-label="Slide 3"></button>
-        <button class="dot" aria-label="Slide 4"></button>
-        <button class="dot" aria-label="Slide 5"></button>
-      </div>
+    <div class="static-photo">
+      <img src="./pug-photo-01.jpeg" alt="POPPING UP GUNMA メンバー" loading="eager" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
+      <div class="static-photo-tag"><em>—</em>POPPING UP GUNMA · 2024</div>
     </div>
   </div>
 </section>
@@ -1380,30 +1335,9 @@
       </div>
 
       <div class="about-photo-col reveal">
-        <div class="slideshow" data-interval="5000" data-start="1">
-          <div class="slide">
-            <img src="./pug-photo-02.jpeg" alt="PUGの活動 01" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
-          </div>
-          <div class="slide">
-            <img src="./pug-photo-03.jpeg" alt="PUGの活動 02" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg';">
-          </div>
-          <div class="slide">
-            <img src="./pug-photo-04.jpeg" alt="PUGの活動 03" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg';">
-          </div>
-          <div class="slide">
-            <img src="./pug-photo-05.jpeg" alt="PUGの活動 04" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg';">
-          </div>
-          <div class="slide">
-            <img src="./pug-photo-01.jpeg" alt="PUGの活動 05" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
-          </div>
-          <div class="slideshow-counter"><em>—</em>ACTIVITIES</div>
-          <div class="slideshow-nav">
-            <button class="dot active" aria-label="Slide 1"></button>
-            <button class="dot" aria-label="Slide 2"></button>
-            <button class="dot" aria-label="Slide 3"></button>
-            <button class="dot" aria-label="Slide 4"></button>
-            <button class="dot" aria-label="Slide 5"></button>
-          </div>
+        <div class="about-static-photo">
+          <img src="./pug-photo-02.jpeg" alt="POPPING UP GUNMA の活動" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
+          <div class="about-photo-caption"><em>—</em>ACTIVITIES · 勉強会</div>
         </div>
       </div>
     </div>
@@ -1460,31 +1394,17 @@
   </div>
 </section>
 
-<!-- ===== GALLERY BAND (full-bleed slideshow) ===== -->
+<!-- ===== GALLERY BAND (full-bleed static photos) ===== -->
 <div class="gallery-band reveal">
-  <div class="slideshow" data-interval="5500" data-start="2">
-    <div class="slide">
+  <div class="gallery-grid-static">
+    <div class="gallery-photo">
       <img src="./pug-photo-03.jpeg" alt="PUG活動 01" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg';">
     </div>
-    <div class="slide">
+    <div class="gallery-photo">
       <img src="./pug-photo-04.jpeg" alt="PUG活動 02" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg';">
     </div>
-    <div class="slide">
-      <img src="./pug-photo-01.jpeg" alt="PUG活動 03" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
-    </div>
-    <div class="slide">
-      <img src="./pug-photo-02.jpeg" alt="PUG活動 04" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
-    </div>
-    <div class="slide">
-      <img src="./pug-photo-05.jpeg" alt="PUG活動 05" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg';">
-    </div>
-    <div class="slideshow-counter"><em>—</em>DOCUMENTED</div>
-    <div class="slideshow-nav">
-      <button class="dot active" aria-label="Slide 1"></button>
-      <button class="dot" aria-label="Slide 2"></button>
-      <button class="dot" aria-label="Slide 3"></button>
-      <button class="dot" aria-label="Slide 4"></button>
-      <button class="dot" aria-label="Slide 5"></button>
+    <div class="gallery-photo">
+      <img src="./pug-photo-05.jpeg" alt="PUG活動 03" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg';">
     </div>
   </div>
   <div class="gallery-caption-strip">
@@ -1611,88 +1531,6 @@
   </div>
 </section>
 
-<!-- ===== INSTAGRAM ===== -->
-<section id="ig">
-  <div class="wrap">
-    <div class="chapter-mark reveal">
-      <div class="num">—</div>
-      <div class="label">— Instagram / @poppingup960</div>
-    </div>
-
-    <div class="ig-header reveal">
-      <div class="ig-header-left">
-        <h2 class="chapter-title" style="margin-bottom: 16px;">活動の、<span class="accent">かたち。</span></h2>
-        <p style="font-size: 16px; line-height: 1.9; color: var(--ink-soft);">
-          勉強会、ワークショップ、プロジェクト報告——私たちの日々の活動はInstagramで発信しています。ぜひ一度、ご覧ください。
-        </p>
-      </div>
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-follow-btn">
-        Instagramで見る <span class="arrow">↗</span>
-      </a>
-    </div>
-
-    <!-- Instagram-style photo grid using real PUG photos -->
-    <div class="ig-grid reveal">
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-post">
-        <img src="./pug-photo-01.jpeg" alt="PUG投稿 01" onerror="this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
-        <div class="ig-post-overlay">
-          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-          </svg>
-        </div>
-      </a>
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-post">
-        <img src="./pug-photo-02.jpeg" alt="PUG投稿 02" onerror="this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
-        <div class="ig-post-overlay">
-          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-          </svg>
-        </div>
-      </a>
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-post">
-        <img src="./pug-photo-03.jpeg" alt="PUG投稿 03" onerror="this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg';">
-        <div class="ig-post-overlay">
-          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-          </svg>
-        </div>
-      </a>
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-post">
-        <img src="./pug-photo-04.jpeg" alt="PUG投稿 04" onerror="this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg';">
-        <div class="ig-post-overlay">
-          <svg class="ig-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-          </svg>
-        </div>
-      </a>
-    </div>
-
-    <!-- Instagram handle footer -->
-    <div class="ig-footer reveal">
-      <a href="https://www.instagram.com/poppingup960/" target="_blank" class="ig-footer-link">
-        <svg class="ig-footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <rect x="3" y="3" width="18" height="18" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
-        </svg>
-        <div>
-          <div class="ig-footer-handle">@poppingup960</div>
-          <div class="ig-footer-note">最新の活動はInstagramをフォロー</div>
-        </div>
-        <span class="ig-footer-arrow">↗</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ===== 04 · PROVIDE ===== -->
 <section id="provide">
   <div class="wrap">
@@ -1766,35 +1604,6 @@
         <div class="provide-content">
           <h3>地域と学生への、ブランディング。</h3>
           <p>群馬の学生コミュニティと連携する企業として、採用市場・地域双方への認知と好意度を、自然なかたちで積み上げます。</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Closing slideshow after the 04 list -->
-    <div class="provide-closing-photo reveal">
-      <div class="slideshow" data-interval="5500" data-start="3">
-        <div class="slide">
-          <img src="./pug-photo-05.jpeg" alt="PUGの協働 01" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0825.jpeg';">
-        </div>
-        <div class="slide">
-          <img src="./pug-photo-04.jpeg" alt="PUGの協働 02" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0830.jpeg';">
-        </div>
-        <div class="slide">
-          <img src="./pug-photo-03.jpeg" alt="PUGの協働 03" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0828.jpeg';">
-        </div>
-        <div class="slide">
-          <img src="./pug-photo-02.jpeg" alt="PUGの協働 04" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0852.jpeg';">
-        </div>
-        <div class="slide">
-          <img src="./pug-photo-01.jpeg" alt="PUGの協働 05" onerror="this.onerror=null;this.src='https://club-circle.hess.gunma-u.ac.jp/poppingup/wp-content/uploads/sites/193/2026/02/IMG_0824.jpeg';">
-        </div>
-        <div class="slideshow-counter"><em>—</em>WITH YOU</div>
-        <div class="slideshow-nav">
-          <button class="dot active" aria-label="Slide 1"></button>
-          <button class="dot" aria-label="Slide 2"></button>
-          <button class="dot" aria-label="Slide 3"></button>
-          <button class="dot" aria-label="Slide 4"></button>
-          <button class="dot" aria-label="Slide 5"></button>
         </div>
       </div>
     </div>
