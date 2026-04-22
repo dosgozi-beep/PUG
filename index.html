@@ -267,29 +267,34 @@
   .hero-title {
     font-family: "Shippori Mincho", serif;
     font-weight: 800;
-    font-size: clamp(44px, 7.2vw, 122px);
+    font-size: clamp(40px, 6.4vw, 108px);
     line-height: 1.04;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     color: var(--ink);
     margin-bottom: 28px;
     position: relative;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
   .hero-title .line1 {
     display: block;
-    font-size: 0.68em;
+    font-size: 0.58em;
     line-height: 1.3;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
     color: var(--ink-soft);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    white-space: nowrap;
   }
   .hero-title .accent {
     color: var(--accent);
     position: relative;
     display: inline-block;
+    white-space: nowrap;
   }
   .hero-title .accent-last {
     position: relative;
     display: inline-block;
+    white-space: nowrap;
   }
   .hero-title .accent-last::after {
     content: "";
@@ -428,24 +433,36 @@
   /* Gallery static grid */
   .gallery-grid-static {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 0;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 3px;
+    background: var(--bg-dark);
+    aspect-ratio: 21 / 9;
+    max-height: 640px;
   }
   .gallery-grid-static .gallery-photo {
-    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--bg-alt);
     position: relative;
+    height: 100%;
   }
   .gallery-grid-static .gallery-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 1s ease;
+    transition: transform 1s ease, filter 0.5s ease;
+    filter: saturate(0.95) contrast(1);
   }
   .gallery-grid-static .gallery-photo:hover img {
     transform: scale(1.05);
+    filter: saturate(1.05) contrast(1.02);
+  }
+  .gallery-grid-static .gallery-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(26, 24, 20, 0.25) 100%);
+    pointer-events: none;
   }
 
   /* Floating particles */
@@ -729,15 +746,11 @@
     color: var(--ink-soft);
   }
 
-  /* ===== Gallery Band (full-bleed slideshow) ===== */
+  /* ===== Gallery Band (full-bleed) ===== */
   .gallery-band {
     padding: 0;
     border-bottom: 1px solid var(--line);
     background: var(--bg-dark);
-  }
-  .gallery-band .slideshow {
-    aspect-ratio: 21 / 9;
-    max-height: 720px;
   }
   .gallery-caption-strip {
     background: var(--bg-dark);
@@ -1209,11 +1222,10 @@
     nav { padding: 14px 20px; }
     nav ul { display: none; }
     .hero-top { flex-direction: column; gap: 14px; margin-bottom: 28px; }
-    /* Hero title: 3 lines on mobile */
-    .hero-title { font-size: clamp(38px, 11vw, 64px); }
+    /* Hero title: keep 3 lines cleanly on mobile */
+    .hero-title { font-size: clamp(40px, 12vw, 72px); }
     .hero-title .line1 {
-      font-size: 0.52em;
-      white-space: nowrap;
+      font-size: 0.48em;
       margin-bottom: 14px;
     }
     .stats-strip { grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 18px; }
@@ -1227,7 +1239,11 @@
     .mission-row { grid-template-columns: 1fr; }
     .mission { border-right: none; border-bottom: 1px solid var(--line-soft); padding: 28px 0; }
     .mission:last-child { border-bottom: none; }
-    .gallery-grid-static { grid-template-columns: 1fr; }
+    .gallery-grid-static { 
+      grid-template-columns: 1fr; 
+      aspect-ratio: auto;
+      max-height: none;
+    }
     .gallery-grid-static .gallery-photo { aspect-ratio: 4 / 3; }
     .record-item { grid-template-columns: 60px 1fr; gap: 14px; padding: 28px 0; }
     .record-item .year { grid-column: 1 / 3; padding-top: 4px; }
